@@ -3,8 +3,13 @@ import { NextResponse } from 'next/server'
 
 export async function POST() {
   try {
+    console.log('Logout API called')
+
     const supabase = await createClient()
+    console.log('Supabase client created')
+
     const { error } = await supabase.auth.signOut()
+    console.log('Supabase signOut result:', { error })
 
     if (error) {
       console.error('Supabase logout error:', error)
@@ -25,41 +30,7 @@ export async function POST() {
     response.headers.set('Pragma', 'no-cache')
     response.headers.set('Expires', '0')
 
-    // Supabase 관련 쿠키들을 명시적으로 삭제
-    const authCookies = [
-      'sb-access-token',
-      'sb-refresh-token',
-      'supabase-auth-token',
-      'sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0] + '-auth-token'
-    ]
-
-    // 모든 가능한 쿠키 정리
-    authCookies.forEach(cookieName => {
-      // httpOnly 쿠키 (서버에서만 접근 가능)
-      response.cookies.set(cookieName, '', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      })
-
-      // 클라이언트에서 접근 가능한 쿠키도 정리
-      response.cookies.set(cookieName, '', {
-        maxAge: 0,
-        path: '/',
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      })
-    })
-
-    // 추가적인 보안 헤더
-    response.headers.set('Clear-Site-Data', '"cache", "cookies", "storage"')
-    response.headers.set('X-Logout', 'true')
-
-    console.log('Logout successful, cookies cleared')
-    console.log('Set cookies:', authCookies)
+    console.log('Logout successful')
     return response
   } catch (error) {
     console.error('Logout error:', error)

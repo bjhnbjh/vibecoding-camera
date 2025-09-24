@@ -40,10 +40,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    // 인증된 사용자가 auth 페이지 접근 시 홈으로 리다이렉트
-    if (request.nextUrl.pathname.startsWith('/auth') && user) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+  // 인증된 사용자가 auth 페이지 접근 시 홈으로 리다이렉트 (로그아웃 API는 제외)
+  if (request.nextUrl.pathname.startsWith('/auth') && user && !request.nextUrl.pathname.startsWith('/auth/logout') && !request.nextUrl.pathname.startsWith('/auth/api/')) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
     return response
   } catch (error) {
