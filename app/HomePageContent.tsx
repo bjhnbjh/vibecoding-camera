@@ -49,27 +49,71 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
   // 로그아웃 처리
   const handleLogout = useCallback(async () => {
     try {
+      console.log('Starting logout process...')
+
       const response = await fetch('/auth/logout', { method: 'POST' });
 
+      console.log('Logout response status:', response.status)
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('Logout response:', data)
+        console.log('Logout headers:', Object.fromEntries(response.headers.entries()))
+
         // 사용자 상태를 null로 설정하여 즉시 UI 업데이트
         setUser(null);
 
-        // 브라우저 스토리지 정리
+        // 브라우저 스토리지 완전 정리
         localStorage.clear();
         sessionStorage.clear();
 
-        // 캐시 정리 (새로고침 강제)
-        window.location.reload();
+        // 모든 캐시와 쿠키 정리
+        if ('caches' in window) {
+          try {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map(name => caches.delete(name)));
+          } catch (e) {
+            console.log('Cache cleanup error:', e);
+          }
+        }
+
+        // 모든 쿠키 삭제 (더 철저하게)
+        document.cookie.split(";").forEach(cookie => {
+          const eqPos = cookie.indexOf("=");
+          const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+          if (name) {
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + window.location.hostname;
+          }
+        });
+
+        // Service Worker 정리
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => registration.unregister());
+          });
+        }
+
+        console.log('Client-side cleanup completed')
+
+        // 성공 메시지 표시 후 새로고침
+        showSuccess(data.message || '로그아웃되었습니다.');
+
+        // 더 확실한 새로고침 (새로운 세션 시작)
+        setTimeout(() => {
+          window.location.href = window.location.origin;
+        }, 1500);
+
       } else {
         const data = await response.json();
+        console.error('Logout failed:', data);
         showError(data.error || '로그아웃 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('로그아웃 중 오류:', error);
       showError('로그아웃 중 오류가 발생했습니다.');
     }
-  }, [showError]);
+  }, [showError, showSuccess]);
 
   // 이미지 업로드 및 분석 처리
   const handleImageSelect = useCallback(async (file: File) => {
