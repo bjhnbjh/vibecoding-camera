@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase",
+        "--project-ref=hefdtecmfpvkiymtkeyc"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_4fee5844d45fd80652d8021fbe40f450edd72df3"
+      }
+    },
+    "tosspayments-integration-guide": {
+      "command": "npx",
+      "args": ["-y", "@tosspayments/integration-guide-mcp@latest"]
+    }
+  }
+}

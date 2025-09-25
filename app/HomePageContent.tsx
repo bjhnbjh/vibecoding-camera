@@ -129,7 +129,7 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
   const isAuthenticated = !!user;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
+    <div className="min-h-screen">
       {/* 헤더 */}
       <Header
         isAuthenticated={isAuthenticated}
@@ -145,29 +145,22 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
           <AuthPrompt onLogin={handleLogin} />
         ) : (
           // 로그인 상태 - 메인 기록 버튼과 요약
-          <div className="max-w-md text-center space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                오늘의 식단을 기록해보세요
-              </h2>
-              <p className="text-gray-600">
-                음식 사진을 찍거나 선택하면 자동으로 분석됩니다
-              </p>
-            </div>
+          <div className="w-full max-w-lg text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              오늘 무엇을 드셨나요?
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              음식 사진을 선택하시면 AI가 자동으로 분석하고 기록해 드립니다.
+            </p>
 
             {/* 메인 기록 버튼 */}
-            <MainRecordButton
-              onImageSelect={handleImageSelect}
-              isLoading={isAnalyzing}
-              disabled={false}
-            />
-
-            {/* 오늘의 기록 요약 */}
-            <TodaysSummary
-              meals={DUMMY_MEALS}
-              totalCalories={320}
-              onViewAll={handleViewAllRecords}
-            />
+            <div className="mt-10">
+              <MainRecordButton
+                onImageSelect={handleImageSelect}
+                isLoading={isAnalyzing}
+                disabled={false}
+              />
+            </div>
           </div>
         )}
       </main>

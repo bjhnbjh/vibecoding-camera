@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 interface HeaderProps {
   isAuthenticated: boolean;
   userName?: string;
@@ -14,34 +16,36 @@ export default function Header({
   onLogout 
 }: HeaderProps) {
   return (
-    <header className="flex justify-between items-center p-4 sm:p-6 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-      <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-lg">🍽️</span>
-        </div>
-        <h1 className="text-xl font-bold text-gray-800">AI 식단 기록</h1>
-      </div>
-      
-      {isAuthenticated ? (
+    <header className="sticky top-0 z-50 bg-white/50 backdrop-blur-lg">
+      <div className="flex justify-between items-center p-4 border-b-2 border-black">
         <div className="flex items-center space-x-3">
-          <span className="text-sm text-gray-600 hidden sm:inline">
-            안녕하세요{userName ? `, ${userName}님` : ''}!
-          </span>
-          <button
-            onClick={onLogout}
-            className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors px-3 py-1 rounded-md hover:bg-emerald-50"
-          >
-            로그아웃
-          </button>
+          <div className="w-9 h-9 bg-emerald-400 rounded-lg flex items-center justify-center border-2 border-black">
+            <span className="text-white font-bold text-xl">🍽️</span>
+          </div>
+          <h1 className="text-xl font-extrabold text-slate-800">AI 식단 기록</h1>
         </div>
-      ) : (
-        <button
-          onClick={onLogin}
-          className="px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-all duration-200 transform hover:scale-105 shadow-sm"
-        >
-          로그인
-        </button>
-      )}
+        
+        {isAuthenticated ? (
+          <div className="flex items-center space-x-2">
+            <Link href="/subscribe" className="neo-button bg-purple-400 hover:bg-purple-500 px-3 py-1.5 text-sm">
+              ✨ 프리미엄
+            </Link>
+            <button
+              onClick={onLogout}
+              className="neo-button bg-slate-200 hover:bg-slate-300 px-3 py-1.5 text-sm"
+            >
+              로그아웃
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onLogin}
+            className="neo-button bg-emerald-400 hover:bg-emerald-500 px-4 py-2 text-base"
+          >
+            로그인
+          </button>
+        )}
+      </div>
     </header>
   );
 }

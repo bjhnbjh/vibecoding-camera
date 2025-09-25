@@ -54,7 +54,7 @@ export default function MainRecordButton({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-xs mx-auto">
       <button
         onClick={handleClick}
         disabled={disabled || isLoading}
@@ -63,43 +63,33 @@ export default function MainRecordButton({
         onDrop={handleDrop}
         className={`
           w-64 h-64 mx-auto rounded-full flex flex-col items-center justify-center
-          text-white font-bold text-xl shadow-2xl transform transition-all duration-300
-          border-4 border-transparent
-          ${isDragOver ? 'border-emerald-300 border-dashed' : ''}
+          font-bold text-xl text-black
+          border-4 border-black
+          transform-gpu
+          ${isDragOver ? 'border-emerald-400 border-dashed' : ''}
           ${isLoading || disabled
-            ? 'bg-gray-400 cursor-not-allowed' 
-            : 'bg-gradient-to-br from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 hover:scale-105 active:scale-95 cursor-pointer'
+            ? 'bg-slate-300 cursor-not-allowed' 
+            : 'bg-gradient-to-br from-emerald-300 to-green-400 neo-button'
           }
-          
-          /* 모바일 최적화 */
-          sm:w-72 sm:h-72
-          md:w-80 md:h-80
-          
-          /* 터치 피드백 */
           touch-manipulation
         `}
       >
         {isLoading ? (
           <div className="flex flex-col items-center space-y-3">
-            <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm">분석 중...</span>
-            <span className="text-xs opacity-75">잠시만 기다려주세요</span>
+            <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-base font-semibold">분석 중...</span>
           </div>
         ) : (
-          <div className="flex flex-col items-center space-y-2">
-            <span className="text-4xl sm:text-5xl">📸</span>
-            <span className="text-lg sm:text-xl">식단 기록하기</span>
-            <span className="text-sm opacity-90">
-              {isDragOver ? '이미지를 여기에 놓으세요' : '탭하여 시작'}
-            </span>
+          <div className="flex flex-col items-center space-y-2 text-center">
+            <span className="text-6xl">🍽️</span>
+            <span className="text-xl font-extrabold">식단 기록</span>
           </div>
         )}
       </button>
       
-      {/* 힌트 텍스트 */}
-      <div className="mt-4 text-center text-sm text-gray-600 space-y-1">
-        <p>📱 카메라로 촬영하거나 갤러리에서 선택</p>
-        <p className="hidden sm:block">💻 데스크톱에서는 드래그&드롭도 가능</p>
+      <div className="mt-8 text-center text-sm text-slate-600 space-y-1">
+        <p>버튼을 눌러 사진을 선택하세요</p>
+        <p className="hidden sm:block">또는 이미지를 드래그&드롭 하세요</p>
       </div>
     </div>
   );

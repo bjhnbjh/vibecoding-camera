@@ -1,16 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "AI 식단 기록 | 원클릭으로 간편하게",
@@ -24,9 +13,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        <script src="https://js.tosspayments.com/v1"></script>
+      </head>
+      <body className="antialiased bg-gradient-to-br from-emerald-50 via-cyan-50 to-sky-100 min-h-screen">
         {children}
       </body>
     </html>
