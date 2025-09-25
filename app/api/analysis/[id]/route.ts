@@ -1,25 +1,33 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * 분석 상태를 폴링하기 위한 API 라우트 핸들러
+ */
 export async function GET(
-  request: NextRequest, 
+  request: NextRequest,
   context: { params: { id: string } }
-): Promise<NextResponse> { // 함수의 반환 타입을 명시적으로 지정
+): Promise<NextResponse> {
   try {
     const supabase = await createClient();
     const analysisId = context.params.id;
 
-    // 1. 사용자 인증 (더 안정적인 방식으로 수정)
+    // 1. 사용자 인증
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { code: 'UNAUTHORIZED', message: '인증되지 않은 사용자입니다.' } }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: { code: 'UNAUTHORIZED', message: '인증되지 않은 사용자입니다.' } },
+        { status: 401 }
+      );
     }
 
     if (!analysisId) {
-        return NextResponse.json({ success: false, error: { code: 'MISSING_PARAMETER', message: '분석 ID가 필요합니다.' } }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: { code: 'MISSING_PARAMETER', message: '분석 ID가 필요합니다.' } },
+        { status: 400 }
+      );
     }
 
     // 2. DB에서 해당 분석 결과 조회
@@ -31,7 +39,10 @@ export async function GET(
       .single();
 
     if (dbError) {
-        return NextResponse.json({ success: false, error: { code: 'NOT_FOUND', message: '분석 결과를 찾을 수 없습니다.' } }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: { code: 'NOT_FOUND', message: '분석 결과를 찾을 수 없습니다.' } },
+        { status: 404 }
+      );
     }
 
     // 3. 조회된 결과 반환
@@ -39,6 +50,9 @@ export async function GET(
 
   } catch (error) {
     console.error('Get Analysis Error:', error);
-    return NextResponse.json({ success: false, error: { code: 'SERVER_ERROR', message: '요청 처리 중 오류가 발생했습니다.' } }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: { code: 'SERVER_ERROR', message: '요청 처리 중 오류가 발생했습니다.' } },
+      { status: 500 }
+    );
   }
 }
