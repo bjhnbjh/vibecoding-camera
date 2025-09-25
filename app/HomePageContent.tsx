@@ -5,20 +5,11 @@ import Header from '@/components/layout/Header';
 import BottomNavigation from '@/components/layout/BottomNavigation';
 import AuthPrompt from '@/components/auth/AuthPrompt';
 import MainRecordButton from '@/components/ui/MainRecordButton';
-import TodaysSummary from '@/components/dashboard/TodaysSummary';
 import Toast from '@/components/ui/Toast';
 import AnalysisResult from '@/components/ui/AnalysisResult';
 import { useToast } from '@/hooks/useToast';
 import { useAnalysis } from '@/hooks/useAnalysis';
 import type { User } from '@supabase/supabase-js';
-
-// 임시 더미 데이터
-const DUMMY_MEALS = [
-  { mealType: '아침' as const, calories: 320, isRecorded: true },
-  { mealType: '점심' as const, isRecorded: false },
-  { mealType: '저녁' as const, isRecorded: false },
-  { mealType: '간식' as const, isRecorded: false },
-];
 
 interface HomePageContentProps {
   initialUser: User | null;
@@ -26,7 +17,6 @@ interface HomePageContentProps {
 
 export default function HomePageContent({ initialUser }: HomePageContentProps) {
   const [user, setUser] = useState<User | null>(initialUser);
-  const [userName] = useState(initialUser?.email?.split('@')[0] || '사용자');
 
   // Toast 훅 사용
   const { toasts, removeToast, showSuccess, showError, showInfo } = useToast();
@@ -120,12 +110,6 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
     }
   }, [analyzeImage, analysisResult, showSuccess]);
 
-  // 전체 기록 보기
-  const handleViewAllRecords = useCallback(() => {
-    // TODO: 대시보드 페이지로 이동
-    showInfo('대시보드 페이지는 준비 중입니다.');
-  }, [showInfo]);
-
   const isAuthenticated = !!user;
 
   return (
@@ -133,7 +117,6 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
       {/* 헤더 */}
       <Header
         isAuthenticated={isAuthenticated}
-        userName={userName}
         onLogin={handleLogin}
         onLogout={handleLogout}
       />

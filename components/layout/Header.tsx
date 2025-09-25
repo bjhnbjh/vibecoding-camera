@@ -4,14 +4,12 @@ import Link from 'next/link';
 
 interface HeaderProps {
   isAuthenticated: boolean;
-  userName?: string;
   onLogin?: () => void;
   onLogout?: () => void;
 }
 
 export default function Header({ 
   isAuthenticated, 
-  userName, 
   onLogin, 
   onLogout 
 }: HeaderProps) {

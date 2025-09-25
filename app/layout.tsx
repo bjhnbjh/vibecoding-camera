@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,11 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <head>
-        <script src="https://js.tosspayments.com/v1"></script>
-      </head>
+      <head />
       <body className="antialiased bg-gradient-to-br from-emerald-50 via-cyan-50 to-sky-100 min-h-screen">
         {children}
+        <Script src="https://js.tosspayments.com/v1" strategy="beforeInteractive" />
       </body>
     </html>
   );
