@@ -4,14 +4,17 @@ import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest, 
+  context: { params: { id: string } }
+): Promise<NextResponse> { // 함수의 반환 타입을 명시적으로 지정
   try {
     const supabase = await createClient();
     const analysisId = context.params.id;
 
-    // 1. 사용자 인증
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // 1. 사용자 인증 (더 안정적인 방식으로 수정)
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
       return NextResponse.json({ success: false, error: { code: 'UNAUTHORIZED', message: '인증되지 않은 사용자입니다.' } }, { status: 401 });
     }
 
