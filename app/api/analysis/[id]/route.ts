@@ -4,10 +4,10 @@ import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
   try {
     const supabase = await createClient();
-    const analysisId = params.id;
+    const analysisId = context.params.id;
 
     // 1. 사용자 인증
     const { data: { user } } = await supabase.auth.getUser();

@@ -19,7 +19,7 @@ export default function HomePageContent({ initialUser }: HomePageContentProps) {
   const [user, setUser] = useState<User | null>(initialUser);
 
   // Toast 훅 사용
-  const { toasts, removeToast, showSuccess, showError, showInfo } = useToast();
+  const { toasts, removeToast, showSuccess, showError } = useToast();
 
   // 분석 훅 사용
   const { isAnalyzing, analysisResult, error, analyzeImage, clearResult } = useAnalysis();
